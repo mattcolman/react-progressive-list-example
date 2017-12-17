@@ -38,7 +38,7 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
     className: undefined,
     idleAmount: 1, // load one extra row on idle by default
     initialAmount: 20,
-    minActiveThreshold: 40,
+    minActiveThreshold: 0,
     progressiveAmount: 40,
     renderLoader: () => null
   };
@@ -55,16 +55,25 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    console.log('did mount', this.ref);
     this.progressivelyLoadMore(false);
-    window.addEventListener('scroll', this.handleScroll, { passive: true });
+    this.ref.parentElement.addEventListener('scroll', this.handleScroll, {
+      passive: true
+    });
+    // window.addEventListener('scroll', this.handleScroll, { passive: true });
   }
 
   handleScroll = e => {
     const { length, progressiveAmount } = this.props;
     const { numRenderRows } = this.state;
-    const { top, height, width } = this.ref.getBoundingClientRect();
+    console.log('scroll ref', e.target);
+    // const { top, height, width } = this.ref.getBoundingClientRect();
+    const top = e.target.scrollTop;
+    const height = e.target.offsetHeight;
+    const scrollHeight = e.target.scrollHeight;
+    console.log('top height', top + height, 'scrollh', scrollHeight);
     if (
-      top + height < window.innerHeight &&
+      top + height >= scrollHeight &&
       numRenderRows !== length &&
       !this.isLoading
     ) {
