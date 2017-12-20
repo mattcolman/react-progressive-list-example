@@ -2,12 +2,22 @@ import React, { Component } from 'react';
 import times from 'lodash/times';
 import glamorous from 'glamorous';
 import { css } from 'glamor';
+import avatar1 from './images/avatar1.png';
+import avatar2 from './images/avatar2.png';
+import avatar3 from './images/avatar3.png';
+import avatar4 from './images/avatar4.png';
+import avatar5 from './images/avatar5.png';
+import avatar6 from './images/avatar6.png';
+import avatar7 from './images/avatar7.png';
+import avatar8 from './images/avatar8.png';
+import avatar9 from './images/avatar9.png';
+import Row from './Row';
 import ReactProgressiveList from './ReactProgressiveList';
 import './App.css';
 
 const Container = glamorous.div({
   height: 200,
-  backgroundColor: '#999',
+  backgroundColor: 'black',
   overflow: 'scroll'
 });
 
@@ -36,17 +46,33 @@ const Spinner = glamorous.div({
   borderTop: '2px solid rgba(255, 255, 255, 1)',
   height: 30,
   width: 30,
-  marginBottom: 30
+  marginBottom: 30,
+  marginTop: 10
 });
 
 class App extends Component {
+  renderRow = index => {
+    const avatar = [
+      avatar1,
+      avatar2,
+      avatar3,
+      avatar4,
+      avatar5,
+      avatar6,
+      avatar7,
+      avatar8,
+      avatar9
+    ][index % 9];
+    const name = ['pete', 'paul', 'ronald'][index % 3];
+    return <Row avatar={avatar} name={name} index={index} />;
+  };
   render() {
     return (
       <div className="App">
         <h1> oh hi React Progressive List </h1>
         <Container>
           <ReactProgressiveList
-            itemRenderer={() => <RowDiv> hi </RowDiv>}
+            itemRenderer={this.renderRow}
             length={40}
             idleAmount={0}
             initialAmount={20}
