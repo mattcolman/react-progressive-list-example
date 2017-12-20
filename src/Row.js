@@ -10,7 +10,7 @@ const Container = glamorous.div(
     alignItems: 'center',
     color: 'white',
     padding: 6,
-    boxShadow: '0px 0px 2px 2px #888888'
+    boxShadow: '0px 0px 1px 1px #000'
   },
   ({ odd }) => ({
     background: odd
@@ -21,12 +21,14 @@ const Container = glamorous.div(
 
 class Row extends Component {
   render() {
-    console.log('render row');
-    const wastingTime = times(100000, () => {
+    // *** super expensive call to show what happens when rendering a row takes a while *** \\
+    const expensiveCall = times(100000, () => {
       return () => {
         return Math.pow(9, 9) * Math.PI;
       };
     }).map(i => i / 2);
+    // *** end *** \\
+
     const { name, avatar, index } = this.props;
     return (
       <Container odd={index % 2}>
