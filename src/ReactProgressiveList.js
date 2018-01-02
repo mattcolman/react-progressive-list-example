@@ -23,7 +23,8 @@ type Props = {
   length: number,
   minActiveThreshold?: number, // we don't want to bother progressive loading if length is very close to initialAmount
   progressiveAmount?: number,
-  renderLoader?: () => any
+  renderLoader?: () => any,
+  useWindowScroll?: boolean
 };
 
 type State = {
@@ -40,7 +41,8 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
     initialAmount: 20,
     minActiveThreshold: 0,
     progressiveAmount: 40,
-    renderLoader: () => null
+    renderLoader: () => null,
+    useWindowScroll: false
   };
   requestId: number; // eslint-disable-line react/sort-comp
   ref: React.Node;
@@ -55,28 +57,33 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    console.log('did mount', this.ref);
+    const { useWindowScroll } = this.props;
     this.progressivelyLoadMore(false);
-    this.ref.parentElement.addEventListener('scroll', this.handleScroll, {
+    const scrollParent = useWindowScroll ? window : this.ref.parentElement;
+    scrollParent.addEventListener('scroll', this.handleScroll, {
       passive: true
     });
-    // window.addEventListener('scroll', this.handleScroll, { passive: true });
   }
 
   handleScroll = e => {
-    const { length, progressiveAmount } = this.props;
+    const { length, progressiveAmount, useWindowScroll } = this.props;
     const { numRenderRows } = this.state;
-    console.log('scroll ref', e.target);
-    // const { top, height, width } = this.ref.getBoundingClientRect();
-    const top = e.target.scrollTop;
-    const height = e.target.offsetHeight;
-    const scrollHeight = e.target.scrollHeight;
-    console.log('top height', top + height, 'scrollh', scrollHeight);
-    if (
-      top + height >= scrollHeight &&
-      numRenderRows !== length &&
-      !this.isLoading
-    ) {
+    // console.log('scroll ref', this.ref);
+    let top, height, scrollHeight, reachedLimit;
+    if (useWindowScroll) {
+      const boundingClientRect = this.ref.getBoundingClientRect();
+      top = boundingClientRect.top;
+      height = boundingClientRect.height;
+      scrollHeight = window.innerHeight;
+      reachedLimit = top + height < scrollHeight;
+    } else {
+      top = e.target.scrollTop;
+      height = e.target.offsetHeight;
+      scrollHeight = e.target.scrollHeight;
+      reachedLimit = top + height >= scrollHeight;
+    }
+    // console.log('top', top + height, 'scrollh', scrollHeight);
+    if (reachedLimit && numRenderRows !== length && !this.isLoading) {
       this.loadMore(progressiveAmount);
     }
   };
@@ -88,8 +95,10 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
   }
 
   componentWillUnmount() {
+    const { useWindowScroll } = this.props;
     if (window.requestIdleCallback) window.cancelIdleCallback(this.requestId);
-    window.removeEventListener('scroll', this.handleScroll);
+    const scrollParent = useWindowScroll ? window : this.ref.parentElement;
+    scrollParent.removeEventListener('scroll', this.handleScroll);
   }
 
   initializeList(props: Props) {
@@ -104,9 +113,9 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
   }
 
   progressivelyLoadMore = (immediateLoad: boolean = true) => {
-    if (!window.requestIdleCallback) return;
     const { length, idleAmount } = this.props;
     const { numRenderRows } = this.state;
+    if (!window.requestIdleCallback || idleAmount === 0) return;
     if (immediateLoad) this.loadMore(idleAmount);
     if (numRenderRows < length) {
       this.requestId = window.requestIdleCallback(this.progressivelyLoadMore);
@@ -114,9 +123,9 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
   };
 
   loadMore(amount: number) {
-    // console.log('loadmore', amount);
     const { length } = this.props;
     if (this.state.numRenderRows >= length) return;
+    // console.log('loadmore', amount);
     this.isLoading = true;
     this.setState(
       state => ({

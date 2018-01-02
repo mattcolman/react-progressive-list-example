@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import times from 'lodash/times';
 import glamorous from 'glamorous';
 import { css } from 'glamor';
 import avatar1 from './images/avatar1.png';
@@ -21,8 +20,8 @@ const Container = glamorous.div({
   overflow: 'scroll'
 });
 
-const RowDiv = glamorous.div({
-  height: 50
+const Heading = glamorous.h1({
+  color: 'white'
 });
 
 const rotation = css.keyframes({
@@ -64,20 +63,21 @@ class App extends Component {
       avatar9
     ][index % 9];
     const name = ['pete', 'paul', 'ronald'][index % 3];
-    return <Row avatar={avatar} name={name} index={index} />;
+    return <Row key={index} avatar={avatar} name={name} index={index} />;
   };
   render() {
     return (
       <div className="App">
-        <h1> oh hi React Progressive List </h1>
+        <Heading> oh hi React Progressive List </Heading>
         <Container>
           <ReactProgressiveList
             itemRenderer={this.renderRow}
-            length={40}
+            length={400}
             idleAmount={0}
             initialAmount={20}
             progressiveAmount={10}
             renderLoader={() => <Spinner />}
+            useWindowScroll={false}
           />
         </Container>
       </div>

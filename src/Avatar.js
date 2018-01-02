@@ -17,7 +17,7 @@ class Avatar extends Component {
     const { img } = this.props;
     return (
       <Container>
-        <img src={img} width={40} height={40} />
+        <img alt="" src={img} width={40} height={40} />
       </Container>
     );
   }
