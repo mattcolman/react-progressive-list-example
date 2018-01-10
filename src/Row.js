@@ -19,6 +19,10 @@ const Container = glamorous.div(
   })
 );
 
+const Num = glamorous.span({
+  padding: 10
+});
+
 class Row extends Component {
   render() {
     // *** super expensive call to show what happens when rendering a row takes a while *** \\
@@ -32,6 +36,7 @@ class Row extends Component {
     const { name, avatar, index } = this.props;
     return (
       <Container odd={index % 2}>
+        <Num>{index + 1}.</Num>
         <Avatar img={avatar} />
         <Details name={name} />
       </Container>

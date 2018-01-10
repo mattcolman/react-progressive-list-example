@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import glamorous from 'glamorous';
 import { css } from 'glamor';
+import logo from './react-progressive-list.jpg';
 import avatar1 from './images/avatar1.png';
 import avatar2 from './images/avatar2.png';
 import avatar3 from './images/avatar3.png';
@@ -16,6 +17,8 @@ import './App.css';
 
 const Container = glamorous.div({
   height: 200,
+  maxWidth: 600,
+  margin: '0 auto',
   backgroundColor: 'black',
   overflow: 'scroll'
 });
@@ -68,7 +71,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Heading> oh hi React Progressive List </Heading>
+        <img src={logo} alt="" width={140} height={140} />
         <Container>
           <ReactProgressiveList
             itemRenderer={this.renderRow}
