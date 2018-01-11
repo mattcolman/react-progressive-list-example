@@ -16,7 +16,7 @@ import ReactProgressiveList from './ReactProgressiveList';
 import './App.css';
 
 const Container = glamorous.div({
-  height: 200,
+  height: 230,
   maxWidth: 600,
   margin: '0 auto',
   backgroundColor: 'black',
@@ -74,12 +74,12 @@ class App extends Component {
         <img src={logo} alt="" width={140} height={140} />
         <Container>
           <ReactProgressiveList
-            itemRenderer={this.renderRow}
-            length={400}
             idleAmount={0}
             initialAmount={20}
             progressiveAmount={10}
+            renderItem={this.renderRow}
             renderLoader={() => <Spinner />}
+            rowCount={50}
             useWindowScroll={false}
           />
         </Container>
