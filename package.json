@@ -8,10 +8,11 @@
     "lodash": "^4.17.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-progressive-list": "^0.1.1",
     "react-prop-types": "^0.4.0",
     "react-scripts": "1.0.17"
   },
-  "homepage" : "http://mattcolman.com/labs/react-progressive-list",
+  "homepage": "http://mattcolman.com/labs/react-progressive-list",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

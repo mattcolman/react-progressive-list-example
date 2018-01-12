@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import glamorous from 'glamorous';
 import { css } from 'glamor';
+import ReactProgressiveList from 'react-progressive-list';
 import logo from './react-progressive-list.jpg';
 import avatar1 from './images/avatar1.png';
 import avatar2 from './images/avatar2.png';
@@ -12,7 +13,6 @@ import avatar7 from './images/avatar7.png';
 import avatar8 from './images/avatar8.png';
 import avatar9 from './images/avatar9.png';
 import Row from './Row';
-import ReactProgressiveList from './ReactProgressiveList';
 import './App.css';
 
 const Container = glamorous.div({
